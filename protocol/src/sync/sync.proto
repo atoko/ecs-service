@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "goland/protocol/gen/go/sync";
+package sync;
+
+import "protocol/src/domain.proto";
+
+message Position {
+  string id = 1;
+  domain.Point point = 2;
+}

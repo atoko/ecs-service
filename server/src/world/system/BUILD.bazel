@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "system",
+    srcs = ["player.go"],
+    importpath = "goland/server/src/world/system",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//server/src/config",
+        "//server/src/world/component",
+        "@com_github_engoengine_ecs//:ecs",
+    ],
+)

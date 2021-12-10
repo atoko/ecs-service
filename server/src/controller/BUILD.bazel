@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "controller",
+    srcs = [
+        "context.go",
+        "handler.go",
+        "log.go",
+        "principal.go",
+    ],
+    importpath = "goland/server/src/controller",
+    visibility = ["//visibility:public"],
+)

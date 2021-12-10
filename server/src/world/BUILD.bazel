@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "world",
+    srcs = [
+        "factory.go",
+        "map.go",
+        "prakriti.go",
+    ],
+    importpath = "goland/server/src/world",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//protocol/src/command",
+        "//server/src/config",
+        "//server/src/presence",
+        "//server/src/world/component",
+        "//server/src/world/system",
+        "@com_github_engoengine_ecs//:ecs",
+    ],
+)

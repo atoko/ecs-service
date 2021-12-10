@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "presence",
+    srcs = [
+        "heartbeat.go",
+        "store.go",
+        "user.go",
+    ],
+    importpath = "goland/server/src/presence",
+    visibility = ["//visibility:public"],
+    deps = ["//server/src/config"],
+)

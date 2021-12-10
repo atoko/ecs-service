@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "session",
+    srcs = [
+        "create.go",
+        "state.go",
+        "store.go",
+    ],
+    importpath = "goland/server/src/session",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//protocol/src/command",
+        "//protocol/src/session",
+        "//server/src/config",
+        "//server/src/controller",
+        "//server/src/presence",
+        "//server/src/world",
+        "@com_github_google_uuid//:uuid",
+    ],
+)

@@ -1,0 +1,12 @@
+syntax = "proto3";
+option go_package = "goland/protocol/gen/go/command";
+package command;
+
+import "protocol/src/domain.proto";
+
+message PresenceCommand {
+  int32 elapsed = 1;
+  domain.Vector3 direction = 2;
+  domain.Vector3 movement = 3;
+  bytes button = 4;
+}

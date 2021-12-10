@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "server",
+    srcs = ["websocket.go"],
+    importpath = "goland/server/src/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//protocol/src/command",
+        "//server/src/controller",
+        "//server/src/presence",
+        "//server/src/session",
+        "@com_github_gorilla_mux//:mux",
+        "@io_nhooyr_websocket//:websocket",
+        "@io_nhooyr_websocket//wsjson",
+    ],
+)

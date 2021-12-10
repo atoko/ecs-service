@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = "goland/protocol/gen/go/session";
+package command;
+
+message CreateResponse {
+  message Session {
+    string id = 1;
+  }
+  Session data = 1;
+}

@@ -1,0 +1,25 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+proto_library(
+    name = "command_proto",
+    srcs = ["command.proto"],
+    visibility = ["//visibility:public"],
+    deps = ["//protocol/src:go_proto"],
+)
+
+go_proto_library(
+    name = "command_go_proto",
+    importpath = "goland/protocol/gen/go/command",
+    proto = ":command_proto",
+    visibility = ["//visibility:public"],
+    deps = ["//protocol/src:go"],
+)
+
+go_library(
+    name = "command",
+    embed = [":command_go_proto"],
+    importpath = "goland/protocol/gen/go/command",
+    visibility = ["//visibility:public"],
+)

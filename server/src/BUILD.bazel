@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "src_lib",
+    srcs = ["main.go"],
+    importpath = "goland/server/src",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//server/src/config",
+        "//server/src/controller",
+        "//server/src/server",
+        "//server/src/session",
+        "@com_github_gorilla_mux//:mux",
+    ],
+)
+
+go_binary(
+    name = "src",
+    embed = [":src_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,34 @@
+load("@npm_web//protoc-gen-ts:index.bzl", "ts_proto_library")
+load("@npm_web//typescript:index.bzl", "tsc")
+load("@build_bazel_rules_nodejs//:index.bzl", "copy_to_bin", "js_library")
+
+ts_proto_library(
+    name = "typescript_proto",
+    deps = [
+        "//protocol/src:go_proto",
+        "//protocol/src/command:command_proto",
+        "//protocol/src/sync:sync_proto",
+    ],
+)
+
+tsc(
+    name = "typescript",
+    args = [
+        "$(execpaths :typescript_proto)",
+        "--outDir @D",
+        "--target esnext",
+        "--module commonjs",
+    ],
+    data = [
+        ":typescript_proto",
+        "@npm_web//:node_modules",
+    ],
+    output_dir = True,
+)
+
+js_library(
+    name = "js",
+    package_name = "@goland/protocol",
+    visibility = ["//visibility:public"],
+    deps = [":typescript"],
+)

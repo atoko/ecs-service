@@ -1,0 +1,9 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "config",
+    srcs = ["log.go"],
+    importpath = "goland/server/src/config",
+    visibility = ["//visibility:public"],
+    deps = ["//server/src/controller"],
+)
