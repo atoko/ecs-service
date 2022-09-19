@@ -17,5 +17,5 @@ type World interface {
 }
 
 func New() World {
-	return (&Prakriti{}).Initialize()
+	return (&Field{}).Initialize()
 }

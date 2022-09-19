@@ -4,7 +4,7 @@ package command;
 
 import "protocol/src/domain.proto";
 
-message PresenceCommand {
+message HIDCommand {
   int32 elapsed = 1;
   domain.Vector3 direction = 2;
   domain.Vector3 movement = 3;

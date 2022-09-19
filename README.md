@@ -1,20 +1,14 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+ECS Service is a Golang application that hosts user sessions. Each session maps back to a (relatively) isolated instance of EngoEngine/ecs [https://github.com/EngoEngine/ecs] (hereafter referred to as a World)
+
+The communication protocol used is Websockets with the messages serialized in Protobuf encoding. All inputs are received and applied as-is. Further implementations may include deduplication, message validations and other modes of latency compensation mechanics.
+
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+The server listens to both HTTP/WS connections on port 9999 by default
+- `cd core`
+- `bazel build //protocol/src:go`
+- `bazel run //server/src `
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+The service mainly interfaces via an HTTP api (`v1/session`). After submitting a `POST` request, a 'World' object is created and given an ID. This `World` object contains the entire state of a given session and manages all communication between connected clients.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)

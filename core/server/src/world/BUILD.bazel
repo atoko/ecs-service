@@ -5,7 +5,7 @@ go_library(
     srcs = [
         "factory.go",
         "map.go",
-        "prakriti.go",
+        "field.go",
     ],
     importpath = "goland/server/src/world",
     visibility = ["//visibility:public"],

@@ -9,13 +9,20 @@ go_library(
         "//server/src/config",
         "//server/src/controller",
         "//server/src/server",
-        "//server/src/session",
-        "@com_github_gorilla_mux//:mux",
+        "//server/src/session"
     ],
 )
 
 go_binary(
     name = "src",
     embed = [":src_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "src_wasm",
+    embed = [":src_lib"],
+    goarch = "wasm",
+    goos = "js",
     visibility = ["//visibility:public"],
 )

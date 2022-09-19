@@ -14,13 +14,13 @@ type State struct {
 	commands chan interface{}
 	closed   chan bool
 	players  []string
-	world	world.World
+	world    world.World
 	lastTime time.Time
 }
 
 type PresenceCommand struct {
-	Id string
-	Command *command.PresenceCommand
+	Id      string
+	Command *command.HIDCommand
 }
 
 type JoinCommand struct {

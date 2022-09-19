@@ -7,6 +7,7 @@ go_library(
         "handler.go",
         "log.go",
         "principal.go",
+        "@com_github_golang_jwt_jwt_v4//:jwt",
     ],
     importpath = "goland/server/src/controller",
     visibility = ["//visibility:public"],

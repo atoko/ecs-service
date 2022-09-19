@@ -1,41 +1,41 @@
 package world
 
 import (
+	"github.com/EngoEngine/ecs"
 	"goland/protocol/gen/go/command"
 	"goland/server/src/presence"
-	"github.com/EngoEngine/ecs"
 	"goland/server/src/world/component"
 	"goland/server/src/world/system"
 	"math"
 	"time"
 )
 
-type PrakritiInput struct {
-	player string
+type FieldInput struct {
+	player    string
 	direction component.V2
-	movement component.V2
+	movement  component.V2
 }
 
-func (p PrakritiInput) PlayerId() string {
-	return p.player
+func (f FieldInput) PlayerId() string {
+	return f.player
 }
 
-type Prakriti struct {
-	world *ecs.World
-	tiles *Map
+type Field struct {
+	world   *ecs.World
+	tiles   *Map
 	players *system.PlayerSystem
 }
 
-type PrakritiPlayer struct {
+type FieldPlayer struct {
 	ecs.BasicEntity
 	component.Transform
 	component.Player
 }
 
-func ConvertToPI(playerId string, c *command.PresenceCommand) *PrakritiInput {
+func ConvertToPI(playerId string, c *command.HIDCommand) *FieldInput {
 	// Bounds check -1 to 1 for vectors
 
-	return &PrakritiInput{
+	return &FieldInput{
 		player: playerId,
 		direction: component.V2{
 			X: c.Direction.X,
@@ -48,26 +48,25 @@ func ConvertToPI(playerId string, c *command.PresenceCommand) *PrakritiInput {
 	}
 }
 
-func (pr *Prakriti) Initialize() World {
-	pr.world = &ecs.World{}
-	pr.tiles = NewBorderedMap(80, 55)
-	pr.players = &system.PlayerSystem{}
+func (f *Field) Initialize() World {
+	f.world = &ecs.World{}
+	f.tiles = NewBorderedMap(80, 55)
+	f.players = &system.PlayerSystem{}
 
 	var playerable *system.Playerable
-	pr.world.AddSystemInterface(pr.players, playerable, nil)
+	f.world.AddSystemInterface(f.players, playerable, nil)
 
-	return pr
+	return f
 }
 
-
-func (pr *Prakriti) Join(playerId string) {
-	if exists := pr.players.Get(playerId); exists == nil {
+func (f *Field) Join(playerId string) {
+	if exists := f.players.Get(playerId); exists == nil {
 		// If it doesn't exist, create a player entity
-		player := &PrakritiPlayer{
+		player := &FieldPlayer{
 			BasicEntity: ecs.NewBasic(),
-			Transform:  component.Transform{
-				X: float32(pr.tiles.Width / 2),
-				Y: float32(pr.tiles.Height / 2),
+			Transform: component.Transform{
+				X:      float32(f.tiles.Width / 2),
+				Y:      float32(f.tiles.Height / 2),
 				Width:  1,
 				Height: 1,
 			},
@@ -76,16 +75,16 @@ func (pr *Prakriti) Join(playerId string) {
 				LastSync: time.Now(),
 			},
 		}
-		pr.world.AddEntity(player)
+		f.world.AddEntity(player)
 	}
 }
 
-func (pr *Prakriti) Leave(playerId string) {
+func (pr *Field) Leave(playerId string) {
 
 }
 
-func (pr *Prakriti) Input(dt float32, i Input) {
-	if input := i.(*PrakritiInput); input != nil {
+func (pr *Field) Input(dt float32, i Input) {
+	if input := i.(*FieldInput); input != nil {
 		m := pr.tiles
 
 		if pe := pr.players.Get(i.PlayerId()); pe != nil {
@@ -105,7 +104,7 @@ func (pr *Prakriti) Input(dt float32, i Input) {
 
 			destination := pr.tiles.xy_idx(
 				int(dx),
-	 			int(dy),
+				int(dy),
 			)
 
 			if tile := pr.tiles.Tiles[destination]; tile != WALL {
@@ -118,23 +117,22 @@ func (pr *Prakriti) Input(dt float32, i Input) {
 	}
 }
 
-func (pr *Prakriti) Update(dt float32) {
-	pr.world.Update(dt)
+func (f *Field) Update(dt float32) {
+	f.world.Update(dt)
 }
 
-func (pr *Prakriti) Sync(pp *presence.User) {
+func (f *Field) Sync(pp *presence.User) {
 	now := time.Now()
 
-	if pe := pr.players.Get(pp.Id); pe != nil {
+	if pe := f.players.Get(pp.Id); pe != nil {
 		p := pe.GetPlayer()
 
-		pp.Outbox <- pr.players.Sync(pe)
+		pp.Outbox <- f.players.Sync(pe)
 		p.LastSync = now
 	}
 	// Spectator / admin?
 }
 
-func (pr *Prakriti) Halt() {
+func (f *Field) Halt() {
 
 }
-

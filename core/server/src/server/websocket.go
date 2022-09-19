@@ -16,7 +16,6 @@ import (
 )
 import "goland/protocol/gen/go/command"
 
-
 const REQUEST_TIMEOUT = 180 * time.Second
 
 var WebsocketHandler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -73,7 +72,8 @@ var WebsocketHandler http.Handler = http.HandlerFunc(func(w http.ResponseWriter,
 			err := wsjson.Write(r.Context(), c, v)
 			if err != nil {
 				go func() {
-					for _ = range user.Outbox {}
+					for _ = range user.Outbox {
+					}
 				}()
 				return
 			}
@@ -83,7 +83,7 @@ var WebsocketHandler http.Handler = http.HandlerFunc(func(w http.ResponseWriter,
 	reason := "TERMINATED"
 	for {
 		ctx, cancel = context.WithTimeout(r.Context(), REQUEST_TIMEOUT)
-		var v command.PresenceCommand
+		var v command.HIDCommand
 		err = wsjson.Read(ctx, c, &v)
 
 		if websocket.CloseStatus(err) == websocket.StatusNormalClosure ||
@@ -115,7 +115,7 @@ var WebsocketHandler http.Handler = http.HandlerFunc(func(w http.ResponseWriter,
 				presence.HeartbeatRecieve(user)
 			} else {
 				state.Inbox <- session.PresenceCommand{
-					Id: user.Id,
+					Id:      user.Id,
 					Command: &v,
 				}
 			}
